@@ -55,25 +55,25 @@ def get_num(chapter_id,photo_num):
 def fix_img(img_name, chapter_id, photo_num):
 
     num = get_num(chapter_id,photo_num)
-    original_img = Image.open(img_name)
-    size = original_img.size
-    img_weight = size[0]
-    img_height = size[1]
-    cut_height = int(img_height/num)
-    scrap_height = img_height % num
-    new_img = Image.new(mode='RGB', size=(img_weight,img_height), color='white')
-    for i in range(num):
-        if i == num - 1:
-            box = (0, cut_height * i, img_weight, cut_height * (i + 1) + scrap_height)
-            piece = original_img.crop(box)
-            fix_box = (0, img_height - cut_height * (i + 1) - scrap_height, img_weight, img_height - cut_height * i)
-            new_img.paste(piece, fix_box)
-        else:
-            box = (0, cut_height*i, img_weight, cut_height*(i+1))
-            piece = original_img.crop(box)
-            fix_box = (0, img_height - cut_height*(i+1), img_weight, img_height - cut_height*i)
-            new_img.paste(piece, fix_box)
-    new_img.save(f'{img_name}.jpg')
+    with Image.open(img_name) as original_img:
+        size = original_img.size
+        img_weight = size[0]
+        img_height = size[1]
+        cut_height = int(img_height/num)
+        scrap_height = img_height % num
+        new_img = Image.new(mode='RGB', size=(img_weight,img_height), color='white')
+        for i in range(num):
+            if i == num - 1:
+                box = (0, cut_height * i, img_weight, cut_height * (i + 1) + scrap_height)
+                piece = original_img.crop(box)
+                fix_box = (0, img_height - cut_height * (i + 1) - scrap_height, img_weight, img_height - cut_height * i)
+                new_img.paste(piece, fix_box)
+            else:
+                box = (0, cut_height*i, img_weight, cut_height*(i+1))
+                piece = original_img.crop(box)
+                fix_box = (0, img_height - cut_height*(i+1), img_weight, img_height - cut_height*i)
+                new_img.paste(piece, fix_box)
+        new_img.save(f'{img_name}.jpg')
 
 
 def img_download(chapter_url, chapter_id, user_agent):
