@@ -1,0 +1,2 @@
+# python_comic_spider
+一个只可下载一个漫画网站漫画的爬虫
